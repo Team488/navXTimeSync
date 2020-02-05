@@ -8,9 +8,14 @@
 #include <cstring>
 #include <string>
 #include <time.h>
-#include <unistd.h>
 
 #include "SerialIO.h"
+
+#ifdef _WIN32
+#include "windows/SerialPort.h"
+#else
+#include "linux/SerialPort.h"
+#endif
 
 static const double IO_TIMEOUT_SECONDS = 1.0;
 
@@ -41,7 +46,7 @@ SerialIO::SerialIO( std::string port_id,
     }
 }
 
-SerialPort *SerialIO::ResetSerialPort(void)
+ISerialPort *SerialIO::ResetSerialPort(void)
 {
     if (serial_port != 0) {
         try {
@@ -55,7 +60,7 @@ SerialPort *SerialIO::ResetSerialPort(void)
     return serial_port;
 }
 
-SerialPort *SerialIO::GetMaybeCreateSerialPort(void)
+ISerialPort *SerialIO::GetMaybeCreateSerialPort(void)
 {
     if (serial_port == 0) {
         try {

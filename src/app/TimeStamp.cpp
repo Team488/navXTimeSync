@@ -3,8 +3,13 @@
 #include <iomanip>
 #include <signal.h>
 
-#include "AHRS.h"
-#include "TimeStamp.h"
+#include <NavX/AHRS.h>
+
+#ifdef _WIN32
+std::string serial_port_id = "com4";
+#else
+std::string serial_port_id = "/dev/ttyACM0";
+#endif
 
 volatile sig_atomic_t sflag = 0;
 
@@ -21,7 +26,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Program Executing\n";
     signal(SIGINT, handle_sig);
 
-    AHRS com("/dev/ttyACM0", AHRS::SerialDataType::kProcessedData, 200);
+    AHRS com(serial_port_id, AHRS::SerialDataType::kProcessedData, 200);
 
     printf("Initializing\n\n");
 

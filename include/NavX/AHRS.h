@@ -11,7 +11,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
-#include <pthread.h>
+#include <thread>
 
 #include "ITimestampedDataSubscriber.h"
 
@@ -110,13 +110,13 @@ private:
     long       last_sensor_timestamp;
     double     last_update_time;
 
-	pthread_t  trd;
+	std::thread trd;
 	std::mutex mutex;
 
     InertialDataIntegrator *integrator;
     ContinuousAngleTracker *yaw_angle_tracker;
-    OffsetTracker *         yaw_offset_tracker;
-    IIOProvider *           io;
+    OffsetTracker          *yaw_offset_tracker;
+    IIOProvider            *io;
 
 
 #define MAX_NUM_CALLBACKS 3
@@ -192,7 +192,7 @@ public:
 private:
     void SerialInit(const std::string &serial_port_id, AHRS::SerialDataType data_type, uint8_t update_rate_hz);
     void commonInit( uint8_t update_rate_hz );
-    static void *ThreadFunc(void *threadarg);
+    static void ThreadFunc(IIOProvider *io_provider);
 
     /* LiveWindowSendable implementation */
     std::string GetSmartDashboardType(void) const;

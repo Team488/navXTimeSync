@@ -10,8 +10,9 @@
 #include <iomanip>
 #include <ctime>
 
-#include "AHRS.h"
-#include "AHRSProtocol.h"
+#include <NavX/AHRS.h>
+#include <NavX/AHRSProtocol.h>
+
 #include "ContinuousAngleTracker.h"
 #include "IBoardCapabilities.h"
 #include "IIOProvider.h"
@@ -931,7 +932,7 @@ void AHRS::SerialInit(const std::string &serial_port_id, AHRS::SerialDataType da
     commonInit(update_rate_hz);
     bool processed_data = (data_type == SerialDataType::kProcessedData);
     io = new SerialIO(serial_port_id, update_rate_hz, processed_data, ahrs_internal, ahrs_internal);
-    pthread_create(&trd, NULL, AHRS::ThreadFunc, io);
+    trd = std::thread(AHRS::ThreadFunc, io);
 }
 
 void AHRS::commonInit( uint8_t update_rate_hz ) {
@@ -1305,10 +1306,8 @@ double AHRS::PIDGet(void) {
     return GetYaw();
 }
 
-void *AHRS::ThreadFunc(void *threadarg) {
-    IIOProvider *io_provider = (IIOProvider*)threadarg;
+void AHRS::ThreadFunc(IIOProvider *io_provider) {
     io_provider->Run();
-	return NULL;
 }
 
 /**
@@ -1402,6 +1401,6 @@ int AHRS::GetRequestedUpdateRate(void) {
 }
 
 void AHRS::Close(void) {
-    io->Stop();    
-	pthread_join(trd, NULL);
+    io->Stop();
+    trd.join();
 }

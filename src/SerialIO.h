@@ -8,22 +8,20 @@
 #ifndef SRC_SERIALIO_H_
 #define SRC_SERIALIO_H_
 
-//include "WPILIb.h"
-
 #include <cstdint>
 
-#include "AHRSProtocol.h"
+#include <NavX/AHRSProtocol.h>
+#include <NavX/IMUProtocol.h>
+
 #include "IBoardCapabilities.h"
 #include "IIOCompleteNotification.h"
 #include "IIOProvider.h"
-#include "IMUProtocol.h"
-#include "SerialPort.h"
+#include "ISerialPort.h"
 
 class SerialIO : public IIOProvider {
 
-
     std::string serial_port_id;
-    SerialPort *serial_port;
+    ISerialPort *serial_port;
     uint8_t next_integration_control_action;
     bool signal_transmit_integration_control;
     bool signal_retransmit_stream_config;
@@ -57,10 +55,10 @@ public:
     void ZeroDisplacement(void);
     void Run(void);
     void Stop(void);
-private:
 
-    SerialPort *ResetSerialPort(void);
-    SerialPort *GetMaybeCreateSerialPort(void);
+private:
+    ISerialPort *ResetSerialPort(void);
+    ISerialPort *GetMaybeCreateSerialPort(void);
     void EnqueueIntegrationControlMessage(uint8_t action);
     void DispatchStreamResponse(const IMUProtocol::StreamResponse& response);
     int DecodePacketHandler(const char * received_data, int bytes_remaining);

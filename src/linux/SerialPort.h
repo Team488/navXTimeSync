@@ -4,7 +4,9 @@
 #include <termios.h>
 #include <unistd.h>
 
-class SerialPort {
+#include "../ISerialPort.h"
+
+class SerialPort : public ISerialPort {
 
     private:
         int ReadBufferSize;
