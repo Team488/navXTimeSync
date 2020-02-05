@@ -18,8 +18,8 @@ public:
     virtual void EnableTermination(char c) = 0;
     virtual void Flush(void) = 0;
     virtual void Write(const char *data, int length) = 0;
-    virtual int  GetBytesReceived(void) = 0;
-    virtual int  Read(char *data, int size) = 0;
+    virtual int GetBytesReceived(void) = 0;
+    virtual int Read(char *data, int size) = 0;
     virtual void WaitForData(void) = 0;
     virtual void Reset(void) = 0;
     virtual void Close(void) = 0;
