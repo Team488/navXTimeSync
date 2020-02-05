@@ -15,7 +15,7 @@ if (WIN32)
         "src/*"
         "src/windows/*")
 else()
-	file(GLOB LIB_SOURCES
+    file(GLOB LIB_SOURCES
         "src/*"
         "src/linux/*")
 endif()
