@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.8)
-project (NavX)
+project (navx)
 
 if(NOT CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 11)
@@ -21,19 +21,19 @@ else()
 endif()
 
 # Library
-add_library(NavX STATIC ${LIB_SOURCES})
-target_include_directories(NavX PUBLIC include)
+add_library(navx STATIC ${LIB_SOURCES})
+target_include_directories(navx PUBLIC include)
 
 # Application
 add_executable(NavXTimeStamp "src/app/TimeStamp.cpp")
-target_link_libraries(NavXTimeStamp NavX)
+target_link_libraries(NavXTimeStamp navx)
 
 # Install
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "default install path" FORCE)
 endif()
 install(
-    TARGETS NavX NavXTimeStamp
+    TARGETS navx NavXTimeStamp
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin)
